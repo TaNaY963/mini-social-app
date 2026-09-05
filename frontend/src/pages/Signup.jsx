@@ -15,7 +15,7 @@ function Signup() {
 
     try {
       await axios.post(
-        "http://localhost:5001/api/auth/signup",
+        `${BASE_URL}/api/auth/signup`,
         {
           username,
           email,

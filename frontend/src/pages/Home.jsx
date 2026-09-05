@@ -8,6 +8,7 @@ import CreatePost from "../components/CreatePost";
 import FeedFilters from "../components/FeedFilters";
 import Post from "../components/Post";
 
+
 function Home() {
     const [posts, setPosts] = useState([]);
     const [text, setText] = useState("");
@@ -22,7 +23,7 @@ function Home() {
     const fetchPosts = async () => {
         try {
             const response = await axios.get(
-                "http://localhost:5001/api/posts"
+                `${BASE_URL}/api/posts`
             );
 
             setPosts(response.data);
@@ -52,7 +53,7 @@ function Home() {
             if (image) {
                 formData.append("image", image);
             }
-            await axios.post("http://localhost:5001/api/posts", formData);
+            await axios.post(`${BASE_URL}/api/posts`, formData);
             setText(""); setImage(null);
             fetchPosts();
         }
@@ -65,7 +66,7 @@ function Home() {
     const handleLike = async (postId) => {
         try {
             await axios.patch(
-                `http://localhost:5001/api/posts/${postId}/like`,
+                `${BASE_URL}/api/posts/${postId}/like`,
                 {
                     userId,
                 }
@@ -90,7 +91,7 @@ function Home() {
 
         try {
             await axios.post(
-                `http://localhost:5001/api/posts/${postId}/comment`,
+                `${BASE_URL}/api/posts/${postId}/comment`,
                 {
                     userId,
                     text: comment,
@@ -141,7 +142,7 @@ function Home() {
 
         try {
             await axios.delete(
-                `http://localhost:5001/api/posts/${postId}`,
+                `${BASE_URL}/api/posts/${postId}`,
                 {
                     data: { userId },
                 }
