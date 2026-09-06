@@ -1,116 +1,123 @@
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../config";
 import "../App.css";
 
 function Signup() {
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
 
-  const navigate = useNavigate();
+    const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
+    const handleSignup = async (e) => {
+        e.preventDefault();
 
-    try {
-      await axios.post(
-        `${BASE_URL}/api/auth/signup`,
-        {
-          username,
-          email,
-          password,
+        try {
+            await axios.post(
+                `${BASE_URL}/api/auth/signup`,
+                {
+                    username,
+                    email,
+                    password,
+                }
+            );
+
+            setError("");
+            navigate("/login");
+        } catch (error) {
+            setError(
+                error.response?.data?.message ||
+                "Signup failed"
+            );
         }
-      );
+    };
 
-      alert("Signup successful!");
+    return (
+        <div className="auth-page">
+            <div className="auth-card">
 
-      navigate("/login");
-    } catch (error) {
-      alert(
-        error.response?.data?.message ||
-          "Signup failed"
-      );
-    }
-  };
+                <div className="auth-logo">
+                    S
+                </div>
 
-  return (
-    <div className="auth-page">
-      <div className="auth-card">
+                <h1>Create Account</h1>
 
-        <div className="auth-logo">
-          S
+                <p className="auth-subtitle">
+                    Join Social and start sharing
+                </p>
+
+                {error && (
+                    <p style={{ color: "#b00020", marginTop: 8 }}>
+                        {error}
+                    </p>
+                )}
+
+                <form onSubmit={handleSignup}>
+
+                    <div className="form-group">
+                        <label>Username</label>
+
+                        <input
+                            type="text"
+                            placeholder="Enter your username"
+                            value={username}
+                            onChange={(e) =>
+                                setUsername(e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Email</label>
+
+                        <input
+                            type="email"
+                            placeholder="Enter your email"
+                            value={email}
+                            onChange={(e) =>
+                                setEmail(e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <div className="form-group">
+                        <label>Password</label>
+
+                        <input
+                            type="password"
+                            placeholder="Create a password"
+                            value={password}
+                            onChange={(e) =>
+                                setPassword(e.target.value)
+                            }
+                            required
+                        />
+                    </div>
+
+                    <button
+                        type="submit"
+                        className="auth-button"
+                    >
+                        Create Account
+                    </button>
+
+                </form>
+
+                <p className="auth-footer">
+                    Already have an account?{" "}
+                    <Link to="/login">
+                        Login
+                    </Link>
+                </p>
+
+            </div>
         </div>
-
-        <h1>Create Account</h1>
-
-        <p className="auth-subtitle">
-          Join Social and start sharing
-        </p>
-
-        <form onSubmit={handleSignup}>
-
-          <div className="form-group">
-            <label>Username</label>
-
-            <input
-              type="text"
-              placeholder="Enter your username"
-              value={username}
-              onChange={(e) =>
-                setUsername(e.target.value)
-              }
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Email</label>
-
-            <input
-              type="email"
-              placeholder="Enter your email"
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label>Password</label>
-
-            <input
-              type="password"
-              placeholder="Create a password"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-              required
-            />
-          </div>
-
-          <button
-            type="submit"
-            className="auth-button"
-          >
-            Create Account
-          </button>
-
-        </form>
-
-        <p className="auth-footer">
-          Already have an account?{" "}
-          <Link to="/login">
-            Login
-          </Link>
-        </p>
-
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Signup;
